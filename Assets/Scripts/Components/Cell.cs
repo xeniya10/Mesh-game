@@ -1,11 +1,10 @@
 using UnityEngine;
 using TMPro;
-using UnityEngine.UI;
 
-public class MeshCell : MonoBehaviour
+public class Cell : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI _charText;
-    private const int _initialFontSize = 1000;
+    private const int _initialFontSize = 950;
 
     private char _char;
 
@@ -26,5 +25,15 @@ public class MeshCell : MonoBehaviour
     public void SetFontSize(int maxSide)
     {
         _charText.fontSize = _initialFontSize / maxSide;
+    }
+
+    public void BecomeTransparent()
+    {
+        _charText.alpha = 0;
+    }
+
+    public void BecomeVisible()
+    {
+        _charText.alpha = 1;
     }
 }

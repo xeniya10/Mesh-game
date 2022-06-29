@@ -8,6 +8,9 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TMP_InputField _heightInput;
     [SerializeField] private TextMeshProUGUI _warningText;
 
+    private string _warningTooBigValue = "Input value is too big";
+    private string _warningTooSmallValue = "Input value is too small";
+
     public event Action GenerateMeshEvent;
     public event Action JumbleCellEvent;
 
@@ -29,10 +32,11 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void SetWarningText(string text)
-    {
-        _warningText.SetText(text);
-    }
+    public void SetWarningBigValue() => _warningText.SetText(_warningTooBigValue);
+
+    public void SetWarningSmallValue() => _warningText.SetText(_warningTooSmallValue);
+
+    public void ResetWarningText() => _warningText.SetText("");
 
     public void OnClickGenerateButton() => GenerateMeshEvent?.Invoke();
 
