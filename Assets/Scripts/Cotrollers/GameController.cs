@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using UnityEngine;
 using Random = System.Random;
@@ -18,15 +16,16 @@ public class GameController : MonoBehaviour
     private List<Cell> _bufferCellList = new List<Cell>();
     private List<char> _sortingCharList = new List<char>();
 
+    private const int _totalGeneratedCells = 400;
     private int _heightInput;
     private int _widthInput;
     private int _totalCells;
 
-    private int _totalGeneratedCells = 400;
 
     private void Awake()
     {
         GenerateCellPool();
+
         _UIManager.GenerateMeshEvent += CheckInputValues;
         _UIManager.JumbleCellEvent += JumbleMeshField;
     }
@@ -59,14 +58,16 @@ public class GameController : MonoBehaviour
         {
             var randomChar = CharGenerator.Generate();
             _mainCellList[i].Char = randomChar;
+
             _bufferCellList[i].SetFontSize(maxSide);
             _mainCellList[i].SetFontSize(maxSide);
+
+            _bufferCellList[i].BecomeTransparent();
+            _bufferCellList[i].Show();
             _mainCellList[i].Show();
 
             _mesh.SetCellSize(maxSide);
             _mesh.SetColumn(_widthInput);
-            _bufferCellList[i].BecomeTransparent();
-            _bufferCellList[i].Show();
         }
     }
 
@@ -76,16 +77,12 @@ public class GameController : MonoBehaviour
         _widthInput = _UIManager.Width;
         _totalCells = _heightInput * _widthInput;
 
-        ResetSortingList();
+        _sortingCharList.Clear();
+
         CopyCharValue();
         SortMainList();
 
         _cellAnimation.Move(_mainCellList, _bufferCellList);
-    }
-
-    private void ResetSortingList()
-    {
-        _sortingCharList.Clear();
     }
 
     private void CopyCharValue()
@@ -93,9 +90,10 @@ public class GameController : MonoBehaviour
         for (int i = 0; i < _totalCells; i++)
         {
             _bufferCellList[i].Char = _mainCellList[i].Char;
+            _sortingCharList.Add(_mainCellList[i].Char);
+
             _bufferCellList[i].BecomeVisible();
             _bufferCellList[i].Show();
-            _sortingCharList.Add(_mainCellList[i].Char);
         }
     }
 
@@ -103,7 +101,7 @@ public class GameController : MonoBehaviour
     {
         var random = new Random();
 
-        _sortingCharList = _sortingCharList.OrderBy(ch => random.Next()).ToList();
+        _sortingCharList = _sortingCharList.OrderBy(character => random.Next()).ToList();
 
         for (int i = 0; i < _sortingCharList.Count; i++)
         {
